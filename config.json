@@ -1,0 +1,14 @@
+{
+    "projects": [
+        {
+            "name": "project1",
+            "branch": "main",
+            "path": "/path/to/project1"
+        },
+        {
+            "name": "project2",
+            "branch": "develop",
+            "path": "/path/to/project2"
+        }
+    ]
+}
