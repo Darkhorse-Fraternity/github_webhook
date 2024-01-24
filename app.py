@@ -2,13 +2,13 @@ import hmac
 import hashlib
 from math import log
 import smtplib
+import time
 from flask import Flask, request, abort, send_from_directory
 import subprocess
 import os
 import logging
 from dotenv import load_dotenv
 from email.message import EmailMessage
-from typing import Dict, Any
 import os
 import datetime
 import threading
@@ -83,7 +83,8 @@ def run_deployment_script(project_name: str, project_path: str, log_filename: st
                 if output == '' and proc.poll() is not None:
                     break
                 if output:
-                    log_file.write(output)
+                    timestamp = time.strftime("[%Y-%m-%d %H:%M:%S]")
+                    log_file.write(f"{timestamp:} {output}")
                     log_file.flush()
                     logging.info(output.strip())
             proc.stdout.close()
@@ -92,7 +93,6 @@ def run_deployment_script(project_name: str, project_path: str, log_filename: st
                 raise subprocess.CalledProcessError(return_code, proc.args, output=proc.stdout.read())
     except Exception as e:
         logging.error(f"Error during deployment script execution: {e}")
-        raise e
     finally:
         deployment_threads[project_name]['stop'] = False
 
@@ -170,10 +170,10 @@ def logs(filename):
     if not os.path.exists(os.path.join(logs_directory, log_file)):
         abort(404, description="Log file not found")
 
-    logging.info(f"Downloading logs_directory: {logs_directory}, {log_file}")
+    logging.info(f"Downloading1 logs_directory: {logs_directory}, {log_file}")
     return send_from_directory(logs_directory, log_file)
 
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5001)
+    app.run(host='0.0.0.0', port=5001)
